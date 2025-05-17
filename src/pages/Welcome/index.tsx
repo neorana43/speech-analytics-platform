@@ -17,7 +17,7 @@ const Welcome = () => {
             className="px-7 py-3 text-sm font-medium font-roboto w-full"
             color="primary"
             radius="full"
-            onPress={() => navigate("/transcription-training")}
+            onPress={() => navigate("/transcription")}
           >
             Transcription Training
           </Button>

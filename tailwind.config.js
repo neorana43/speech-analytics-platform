@@ -15,6 +15,7 @@ export default {
         midnight: "#696969",
         light: "#ebebeb",
         primary: "#EC692D",
+        dark: "#717171",
       },
     },
   },
