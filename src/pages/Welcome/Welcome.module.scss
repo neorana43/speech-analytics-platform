@@ -1,8 +1,5 @@
 .welcomeContainer {
-  padding: 2rem;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  @apply lg:px-8 px-5 lg:pt-28 pt-24 min-h-screen flex flex-col;
 
   background: url("/welcome-bg.png") no-repeat center right;
   background-size: contain;

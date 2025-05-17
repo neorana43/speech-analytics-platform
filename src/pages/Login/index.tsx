@@ -1,111 +1,108 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
+import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { addToast } from "@heroui/toast";
 
 import styles from "./Login.module.scss";
 
-interface LoginResponse {
-  token: string;
-}
+import { useAuth } from "@/auth/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const loginMutation = useMutation({
-    mutationFn: async (data: { email: string; password: string }) => {
-      const response = await axios.post<LoginResponse>("/api/login", data); // Replace with actual backend endpoint
-      return response.data;
+    mutationFn: async () => {
+      await login(email, password);
     },
-    onSuccess: (data) => {
-      localStorage.setItem("token", data.token);
+    onSuccess: () => {
       navigate("/welcome");
     },
     onError: () => {
-      toast.error("Login failed", {
+      addToast({
+        title: "Login failed!",
         description: "Invalid email or password. Please try again.",
+        color: "danger",
       });
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loginMutation.mutate({ email, password });
+    loginMutation.mutate();
   };
 
   return (
     <div className={styles.loginContainer}>
       <div className="flex flex-col items-center justify-center gap-7 max-w-[28.875rem] w-full">
-        <img src="/logo.svg" alt="logo" height={56} width={296} />
+        <img alt="logo" height={56} src="/logo.svg" width={296} />
 
         <Card className="w-full py-8 px-12 gap-0">
           {loginMutation.isPending ? (
             <>
-              <CardHeader className="text-center flex flex-col items-center gap-4 font-roboto text-midnight ">
-                <CardTitle className="text-3xl font-medium">
-                  Signing In
-                </CardTitle>
+              <CardHeader className="text-center flex flex-col items-center gap-4 font-roboto text-midnight">
+                <h1 className="text-3xl font-medium">Signing In</h1>
               </CardHeader>
-              <CardContent className="px-0 py-20 text-center">
+              <CardBody className="px-0 py-20 text-center">
                 <img
-                  src="loader.gif"
-                  height={120}
-                  width={120}
+                  alt="Loading"
                   className="mx-auto"
+                  height={120}
+                  src="/loader.gif"
+                  width={120}
                 />
-              </CardContent>
+              </CardBody>
             </>
           ) : (
             <>
-              <CardHeader className="text-center flex flex-col items-center gap-4 font-roboto text-midnight ">
-                <CardTitle className="text-3xl font-medium">Sign in</CardTitle>
-                <CardDescription className="font-bold text-sm">
+              <CardHeader className="text-center flex flex-col items-center gap-4 font-roboto text-midnight">
+                <h1 className="text-3xl font-medium">Sign in</h1>
+                <p className="font-bold text-sm">
                   Use your account to log in to NowSpeech
-                </CardDescription>
+                </p>
               </CardHeader>
-              <CardContent className="px-0 py-20">
+              <CardBody className="px-0 py-20">
                 <form
+                  className="gap-14 flex flex-col items-center px-1"
                   onSubmit={handleSubmit}
-                  className="gap-14 flex flex-col items-center"
                 >
                   <Input
+                    required
+                    classNames={{
+                      inputWrapper: "text-midnight font-roboto bg-light",
+                    }}
+                    label="Email"
+                    radius="full"
                     type="email"
-                    placeholder="Email"
-                    className="bg-light rounded-full text-midnight px-3 py-4 font-roboto"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
                   />
                   <Input
+                    required
+                    classNames={{
+                      inputWrapper: "text-midnight font-roboto bg-light",
+                    }}
+                    label="Password"
+                    radius="full"
                     type="password"
-                    placeholder="Password"
-                    className="bg-light rounded-full text-midnight px-3 py-4 font-roboto"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    required
                   />
                   <Button
-                    className="mt-4 rounded-full px-7 py-3 text-sm font-medium font-roboto "
-                    type="submit"
+                    className="mt-4 px-7 py-3 text-sm font-medium font-roboto"
+                    color="primary"
                     disabled={loginMutation.isPending}
+                    type="submit"
                   >
                     Sign In
                   </Button>
                 </form>
-              </CardContent>
+              </CardBody>
             </>
           )}
         </Card>

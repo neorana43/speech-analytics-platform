@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const PromptDesigner = () => {
-  return (
-    <div>PromptDesigner</div>
-  )
-}
+  return <div>PromptDesigner</div>;
+};
 
-export default PromptDesigner
+export default PromptDesigner;

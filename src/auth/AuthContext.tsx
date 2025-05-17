@@ -1,22 +1,39 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !!localStorage.getItem("token");
+  });
 
-  const login = (email: string, password: string) => {
-    // Replace with real API logic later
-    if (email && password) setIsAuthenticated(true);
+  const login = async (email: string, password: string) => {
+    const response = await axios.post<{ token: string }>("/api/login", {
+      email,
+      password,
+    });
+
+    localStorage.setItem("token", response.data.token);
+    setIsAuthenticated(true);
   };
 
-  const logout = () => setIsAuthenticated(false);
+  const logout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    setIsAuthenticated(!!token);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
@@ -27,6 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) throw new Error("useAuth must be used within AuthProvider");
+
   return context;
 };

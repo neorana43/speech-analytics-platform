@@ -1,17 +1,23 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import Sidebar from "@/components/Sidebar";
+import Topbar from "@/components/Topbar";
 
-export default function AppLayout() {
+const AppLayout = () => {
   const location = useLocation();
   const showProjects = location.pathname.startsWith("/transcription");
 
   return (
-    <div className="app-layout">
-      <Sidebar showProjects={showProjects} />
-      <main className="flex-1">
-        <Outlet />
-      </main>
+    <div className="flex h-screen">
+      {/* <Sidebar showProjects={showProjects} /> */}
+      <div className="flex flex-col flex-1">
+        <Topbar />
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
-}
+};
+
+export default AppLayout;

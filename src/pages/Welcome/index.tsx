@@ -1,22 +1,32 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "@heroui/button";
 
 import styles from "./Welcome.module.scss";
-import Topbar from "@/components/Topbar";
 
 const Welcome = () => {
   const navigate = useNavigate();
+
   return (
     <div className={styles.welcomeContainer}>
-      <Topbar />
-
-      <div className="welcome-content">
-        <h2>Your Speech Analytics Platform</h2>
-        <div className="cta-buttons">
-          <Button onClick={() => navigate("/transcription-training")}>
+      <div className="flex flex-col  m-auto max-w-[25rem] text-center gap-16">
+        <h1 className="font-roboto text-midnight text-4xl font-bold">
+          Your Speech Analytics Platform
+        </h1>
+        <div className="flex gap-8 lg:flex-row flex-col items-center justify-center">
+          <Button
+            className="px-7 py-3 text-sm font-medium font-roboto w-full"
+            color="primary"
+            radius="full"
+            onPress={() => navigate("/transcription-training")}
+          >
             Transcription Training
           </Button>
-          <Button onClick={() => navigate("/prompt-designer")}>
+          <Button
+            className="px-7 py-3 text-sm font-medium font-roboto w-full"
+            color="primary"
+            radius="full"
+            onPress={() => navigate("/prompt-designer")}
+          >
             Prompt Designer
           </Button>
         </div>
