@@ -1,0 +1,9 @@
+.welcomeContainer {
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  background: url("/welcome-bg.png") no-repeat center right;
+  background-size: contain;
+}
