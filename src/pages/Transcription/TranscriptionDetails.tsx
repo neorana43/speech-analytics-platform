@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -67,6 +67,8 @@ const TranscriptionDetails = () => {
   const [page, setPage] = useState(1);
 
   const rowsPerPage = 10;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token || !projectId) return;
@@ -331,7 +333,15 @@ const TranscriptionDetails = () => {
             </TableHeader>
             <TableBody>
               {paginatedData.map((i) => (
-                <TableRow key={i.id}>
+                <TableRow
+                  key={i.id}
+                  className="cursor-pointer hover:bg-gray-50 transition"
+                  onClick={() =>
+                    navigate(
+                      `/transcription/${projectId}/training?interaction_id=${i.interaction_id}`,
+                    )
+                  }
+                >
                   <TableCell>{i.interaction_id}</TableCell>
                   <TableCell>
                     {new Date(i.interaction_date).toLocaleString()}

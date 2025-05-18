@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Button,
   Dropdown,
@@ -19,14 +19,36 @@ interface Client {
   name: string;
 }
 
+interface Interaction {
+  interaction_id: string;
+  status: string;
+}
+
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { token } = useAuth();
+  const [searchParams] = useSearchParams();
 
   const isTranscriptionRoute = location.pathname.startsWith("/transcription");
 
   const [clients, setClients] = useState<Client[]>([]);
+  const [interactionStatus, setInteractionStatus] = useState<string | null>(
+    null,
+  );
+  const [interactionId, setInteractionId] = useState<string | null>(null);
+
+  const selectedProjectId = useMemo(() => {
+    const match = location.pathname.match(/^\/transcription\/(\d+)/);
+
+    return match ? Number(match[1]) : null;
+  }, [location.pathname]);
+
+  const selectedProject = useMemo(() => {
+    return clients.find((client) => client.id === selectedProjectId);
+  }, [clients, selectedProjectId]);
+
+  const isTrainingPage = location.pathname.includes("/training");
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -45,15 +67,39 @@ const Sidebar = () => {
     }
   }, [token, isTranscriptionRoute]);
 
-  const selectedProjectId = useMemo(() => {
-    const match = location.pathname.match(/^\/transcription\/(\d+)/);
+  useEffect(() => {
+    const fetchStatusForInteraction = async () => {
+      // Clear when not on training page
+      if (!isTrainingPage) {
+        setInteractionId(null);
+        setInteractionStatus(null);
 
-    return match ? Number(match[1]) : null;
-  }, [location.pathname]);
+        return;
+      }
 
-  const selectedProject = useMemo(() => {
-    return clients.find((client) => client.id === selectedProjectId);
-  }, [clients, selectedProjectId]);
+      if (!token) return;
+
+      const idFromQuery = searchParams.get("interaction_id");
+
+      setInteractionId(idFromQuery);
+
+      if (idFromQuery) {
+        try {
+          const api = ApiService(token);
+          const interactions = await api.filterInteractions({});
+          const match = interactions.find(
+            (item: Interaction) => item.interaction_id === idFromQuery,
+          );
+
+          setInteractionStatus(match?.status || null);
+        } catch (err) {
+          console.error("❌ Failed to fetch interaction status:", err);
+        }
+      }
+    };
+
+    fetchStatusForInteraction();
+  }, [token, isTrainingPage, searchParams]);
 
   return (
     <div className="flex gap-3 items-end relative">
@@ -137,6 +183,11 @@ const Sidebar = () => {
         >
           <BreadcrumbItem href="/transcription">Projects</BreadcrumbItem>
           <BreadcrumbItem>{selectedProject.name}</BreadcrumbItem>
+
+          {interactionStatus && (
+            <BreadcrumbItem>{interactionStatus}</BreadcrumbItem>
+          )}
+          {interactionId && <BreadcrumbItem>{interactionId}</BreadcrumbItem>}
         </Breadcrumbs>
       )}
     </div>

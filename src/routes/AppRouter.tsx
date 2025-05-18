@@ -7,6 +7,7 @@ import Welcome from "@/pages/Welcome";
 import PromptDesigner from "@/pages/PromptDesigner";
 import Transcription from "@/pages/Transcription";
 import TranscriptionDetails from "@/pages/Transcription/TranscriptionDetails";
+import TranscriptionTraining from "@/pages/Transcription/TranscriptionTraining"; // ✅ import
 
 const AppRouter = () => {
   const { isAuthenticated } = useAuth();
@@ -24,6 +25,10 @@ const AppRouter = () => {
           <Route element={<PromptDesigner />} path="/prompt-designer" />
           <Route element={<Transcription />} path="/transcription" />
           <Route element={<TranscriptionDetails />} path="/transcription/:id" />
+          <Route
+            element={<TranscriptionTraining />}
+            path="/transcription/:id/training"
+          />
         </Route>
       ) : (
         <Route element={<Navigate to="/login" />} path="*" />
