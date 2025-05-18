@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -9,25 +9,48 @@ import {
   Pagination,
   getKeyValue,
 } from "@heroui/react";
-import { Link } from "react-router-dom"; // ✅ import
+import { Link } from "react-router-dom";
 
-import mockData from "@/data/projects.json";
+import { useAuth } from "@/auth/AuthContext";
+import { ApiService } from "@/lib/api";
+
+interface Client {
+  id: number;
+  name: string;
+}
 
 const Transcription = () => {
-  const [page, setPage] = React.useState(1);
+  const { token } = useAuth();
+
+  const [clients, setClients] = useState<Client[]>([]);
+  const [page, setPage] = useState(1);
   const rowsPerPage = 4;
 
-  const projects = mockData.projects;
-  const pages = Math.ceil(projects.length / rowsPerPage);
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const api = ApiService(token!);
+        const data = await api.getClients();
 
-  const items = React.useMemo(() => {
+        setClients(data);
+      } catch (err) {
+        console.error("❌ Failed to fetch clients:", err);
+      }
+    };
+
+    if (token) fetchClients();
+  }, [token]);
+
+  const pages = Math.ceil(clients.length / rowsPerPage);
+
+  const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return projects.slice(start, end);
-  }, [page, projects]);
+    return clients.slice(start, end);
+  }, [page, clients]);
 
-  const classNames = React.useMemo(
+  const classNames = useMemo(
     () => ({
       base: "flex-1",
       wrapper: ["flex-1"],
@@ -39,12 +62,9 @@ const Transcription = () => {
         "border-divider",
       ],
       td: [
-        // first
         "group-data-[first=true]/tr:first:before:rounded-none",
         "group-data-[first=true]/tr:last:before:rounded-none",
-        // middle
         "group-data-[middle=true]/tr:before:rounded-none",
-        // last
         "group-data-[last=true]/tr:first:before:rounded-none",
         "group-data-[last=true]/tr:last:before:rounded-none",
       ],
@@ -54,13 +74,13 @@ const Transcription = () => {
 
   return (
     <div className="flex flex-col gap-4 flex-1">
-      <div className="pl-12 w-full">
+      <div className="pl-[3.25rem] w-full">
         <h2 className="page-title text-primary">Call Processing: Status</h2>
       </div>
 
       <div className="w-full flex flex-col flex-1">
         <Table
-          aria-label="Projects"
+          aria-label="Clients Table"
           bottomContent={
             <div className="flex w-full justify-center">
               <Pagination
@@ -70,7 +90,7 @@ const Transcription = () => {
                 color="primary"
                 page={page}
                 total={pages}
-                onChange={(page) => setPage(page)}
+                onChange={setPage}
               />
             </div>
           }
@@ -91,7 +111,7 @@ const Transcription = () => {
                   <TableCell>
                     {columnKey === "name" ? (
                       <Link
-                        className=" hover:text-primary "
+                        className="hover:text-primary"
                         to={`/transcription/${item.id}`}
                       >
                         {item.name}

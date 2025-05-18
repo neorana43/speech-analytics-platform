@@ -1,10 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@heroui/button";
+import { useEffect } from "react";
 
 import styles from "./Welcome.module.scss";
 
+import { testAllApis } from "@/lib/testApi";
+import { useAuth } from "@/auth/AuthContext";
+
 const Welcome = () => {
   const navigate = useNavigate();
+
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (token) testAllApis(token);
+  }, [token]);
 
   return (
     <div className={styles.welcomeContainer}>

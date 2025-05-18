@@ -1,5 +1,5 @@
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 import {
   Button,
   Dropdown,
@@ -11,14 +11,39 @@ import {
 } from "@heroui/react";
 import { Menu } from "lucide-react";
 
-import mockData from "@/data/projects.json";
+import { useAuth } from "@/auth/AuthContext";
+import { ApiService } from "@/lib/api";
+
+interface Client {
+  id: number;
+  name: string;
+}
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { token } = useAuth();
 
   const isTranscriptionRoute = location.pathname.startsWith("/transcription");
-  const projects = mockData.projects;
+
+  const [clients, setClients] = useState<Client[]>([]);
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const api = ApiService(token!);
+        const data = await api.getClients();
+
+        setClients(data);
+      } catch (err) {
+        console.error("❌ Failed to fetch clients:", err);
+      }
+    };
+
+    if (token && isTranscriptionRoute) {
+      fetchClients();
+    }
+  }, [token, isTranscriptionRoute]);
 
   const selectedProjectId = useMemo(() => {
     const match = location.pathname.match(/^\/transcription\/(\d+)/);
@@ -27,14 +52,14 @@ const Sidebar = () => {
   }, [location.pathname]);
 
   const selectedProject = useMemo(() => {
-    return projects.find((project) => project.id === selectedProjectId);
-  }, [projects, selectedProjectId]);
+    return clients.find((client) => client.id === selectedProjectId);
+  }, [clients, selectedProjectId]);
 
   return (
     <div className="flex gap-3 items-end relative">
       <Dropdown
         classNames={{
-          base: "min-w-[18.75rem] px-6 py-4 h-[calc(100vh-11.25rem)] overflow-y-auto bg-white shadow-lg rounded-xl animate-slide-in-left will-change-transform", // change arrow background
+          base: "min-w-[18.75rem] px-6 py-4 h-[calc(100vh-11.25rem)] overflow-y-auto bg-white shadow-lg rounded-xl animate-slide-in-left will-change-transform",
           content: "bg-transparent shadow-none scale-100",
         }}
         placement="bottom-start"
@@ -62,9 +87,8 @@ const Sidebar = () => {
                 isReadOnly
                 className="cursor-default px-0"
               >
-                <h3 className="text-2xl font-bold text-midnight ">Main Menu</h3>
+                <h3 className="text-2xl font-bold text-midnight">Main Menu</h3>
               </DropdownItem>
-
               <DropdownItem
                 key="transcription"
                 className="px-2"
@@ -72,7 +96,6 @@ const Sidebar = () => {
               >
                 Transcription Training
               </DropdownItem>
-
               <DropdownItem
                 key="prompt"
                 className="px-2"
@@ -88,16 +111,15 @@ const Sidebar = () => {
                 isReadOnly
                 className="cursor-default px-0"
               >
-                <h3 className="text-2xl font-bold text-midnight ">Projects</h3>
+                <h3 className="text-2xl font-bold text-midnight">Projects</h3>
               </DropdownItem>
-
-              {projects.map((project) => (
+              {clients.map((client) => (
                 <DropdownItem
-                  key={project.id}
+                  key={client.id}
                   className="px-2"
-                  onPress={() => navigate(`/transcription/${project.id}`)}
+                  onPress={() => navigate(`/transcription/${client.id}`)}
                 >
-                  {project.name}
+                  {client.name}
                 </DropdownItem>
               ))}
             </>
@@ -105,7 +127,7 @@ const Sidebar = () => {
         </DropdownMenu>
       </Dropdown>
 
-      {location.pathname.match(/^\/transcription\/\d+$/) && selectedProject && (
+      {selectedProject && (
         <Breadcrumbs
           itemClasses={{
             item: "text-light-gray data-[current=true]:text-light-gray font-bold",

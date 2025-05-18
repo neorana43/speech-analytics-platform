@@ -1,9 +1,11 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+
+import { privateApi } from "@/lib/privateAxios";
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  token: string | null;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -14,29 +16,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return !!localStorage.getItem("token");
   });
 
-  const login = async (email: string, password: string) => {
-    const response = await axios.post<{ token: string }>("/api/login", {
-      email,
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("token");
+  });
+
+  const login = async (username: string, password: string) => {
+    // Don't log payload
+    const response = await privateApi.post("/Auth/login", {
+      username,
       password,
     });
+    const token = response.data.token;
 
-    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("token", token);
+    setToken(token);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    setToken(null);
     setIsAuthenticated(false);
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("token");
 
-    setIsAuthenticated(!!token);
+    setToken(storedToken);
+    setIsAuthenticated(!!storedToken);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

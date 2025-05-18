@@ -6,7 +6,7 @@ import Login from "@/pages/Login";
 import Welcome from "@/pages/Welcome";
 import PromptDesigner from "@/pages/PromptDesigner";
 import Transcription from "@/pages/Transcription";
-import TranscriptionProject from "@/pages/Transcription/Project"; // You can create this
+import TranscriptionDetails from "@/pages/Transcription/TranscriptionDetails";
 
 const AppRouter = () => {
   const { isAuthenticated } = useAuth();
@@ -23,7 +23,7 @@ const AppRouter = () => {
           <Route element={<Welcome />} path="/welcome" />
           <Route element={<PromptDesigner />} path="/prompt-designer" />
           <Route element={<Transcription />} path="/transcription" />
-          <Route element={<TranscriptionProject />} path="/transcription/:id" />
+          <Route element={<TranscriptionDetails />} path="/transcription/:id" />
         </Route>
       ) : (
         <Route element={<Navigate to="/login" />} path="*" />

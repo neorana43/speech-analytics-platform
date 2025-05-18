@@ -7,9 +7,11 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     proxy: {
-      "/api/login": {
-        target: "http://localhost:3001",
+      "/api": {
+        target:
+          "https://speechanalyticswebapi-cgcxa9hjevatbsc5.eastus2-01.azurewebsites.net",
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/api"),
       },
     },
   },

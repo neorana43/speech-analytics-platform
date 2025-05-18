@@ -11,14 +11,14 @@ import styles from "./Login.module.scss";
 import { useAuth } from "@/auth/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const loginMutation = useMutation({
     mutationFn: async () => {
-      await login(email, password);
+      await login(username, password); // ✅ pass username
     },
     onSuccess: () => {
       navigate("/welcome");
@@ -26,7 +26,7 @@ const Login = () => {
     onError: () => {
       addToast({
         title: "Login failed!",
-        description: "Invalid email or password. Please try again.",
+        description: "Invalid username or password. Please try again.",
         color: "danger",
       });
     },
@@ -76,11 +76,11 @@ const Login = () => {
                     classNames={{
                       inputWrapper: "text-midnight font-roboto bg-light",
                     }}
-                    label="Email"
+                    label="Username"
                     radius="full"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                   <Input
                     required
@@ -97,6 +97,7 @@ const Login = () => {
                     className="mt-4 px-7 py-3 text-sm font-medium font-roboto"
                     color="primary"
                     disabled={loginMutation.isPending}
+                    radius="full"
                     type="submit"
                   >
                     Sign In
