@@ -1,119 +1,123 @@
-import { useLocation, useNavigate, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   Button,
-  useDisclosure,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Breadcrumbs,
+  BreadcrumbItem,
 } from "@heroui/react";
 import { Menu } from "lucide-react";
-import clsx from "clsx";
+
+import mockData from "@/data/projects.json";
 
 const Sidebar = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
-  const isTranscriptionRoute = location.pathname.startsWith("/transcription");
 
-  const [projects] = useState([
-    { id: 1, name: "Rubenstein Law" },
-    { id: 2, name: "Acme Corp" },
-    { id: 3, name: "Call Center Z" },
-  ]);
+  const isTranscriptionRoute = location.pathname.startsWith("/transcription");
+  const projects = mockData.projects;
+
+  const selectedProjectId = useMemo(() => {
+    const match = location.pathname.match(/^\/transcription\/(\d+)/);
+
+    return match ? Number(match[1]) : null;
+  }, [location.pathname]);
+
+  const selectedProject = useMemo(() => {
+    return projects.find((project) => project.id === selectedProjectId);
+  }, [projects, selectedProjectId]);
 
   return (
-    <>
-      <Button
-        isIconOnly
-        className="fixed top-28 left-4 z-50 p-0 text-midnight rounded"
-        variant="light"
-        onPress={onOpen}
-      >
-        <Menu className="w-12 h-12" />
-      </Button>
-
-      <Drawer
-        backdrop="transparent"
+    <div className="flex gap-3 items-end relative">
+      <Dropdown
         classNames={{
-          wrapper: "top-40 pt-4",
-          base: "shadow-lg rounded-2xl",
+          base: "min-w-[18.75rem] px-6 py-4 h-[calc(100vh-11.25rem)] overflow-y-auto bg-white shadow-lg rounded-xl animate-slide-in-left will-change-transform", // change arrow background
+          content: "bg-transparent shadow-none scale-100",
         }}
-        hideCloseButton={true}
-        isOpen={isOpen}
-        placement="left"
-        size="xs"
-        onOpenChange={onOpenChange}
+        placement="bottom-start"
       >
-        <DrawerContent>
-          {(onClose) => (
-            <>
-              <DrawerBody className="px-6 py-4 text-sm font-medium space-y-4">
-                {!isTranscriptionRoute ? (
-                  <>
-                    <div className=" pt-6 pb-4 ">
-                      <h3 className="text-2xl font-bold text-midnight ">
-                        Main Menu
-                      </h3>
-                    </div>
-                    <NavLink
-                      className={({ isActive }) =>
-                        clsx("block px-2 text-dark hover:text-primary ", {
-                          "text-primary font-semibold": isActive,
-                        })
-                      }
-                      to="/transcription"
-                      onClick={onClose}
-                    >
-                      Transcription Training
-                    </NavLink>
-                    <NavLink
-                      className={({ isActive }) =>
-                        clsx("block px-2 text-dark hover:text-primary ", {
-                          "text-primary font-semibold": isActive,
-                        })
-                      }
-                      to="/prompt-designer"
-                      onClick={onClose}
-                    >
-                      Prompt Designer
-                    </NavLink>
-                  </>
-                ) : (
-                  <>
-                    <div className="pt-6 pb-4">
-                      <h3 className="text-2xl font-bold text-midnight ">
-                        Projects
-                      </h3>
-                    </div>
-                    {projects.map((project) => (
-                      <button
-                        key={project.id}
-                        className="text-left w-full px-2 py-0 text-dark hover:text-primary"
-                        onClick={() => {
-                          navigate(`/transcription/project/${project.id}`);
-                          onClose();
-                        }}
-                      >
-                        {project.name}
-                      </button>
-                    ))}
-                  </>
-                )}
-              </DrawerBody>
+        <DropdownTrigger>
+          <Button
+            isIconOnly
+            className="p-0 text-midnight rounded"
+            variant="light"
+          >
+            <Menu className="w-12 h-12" />
+          </Button>
+        </DropdownTrigger>
 
-              <DrawerFooter className="px-6 py-4">
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-              </DrawerFooter>
+        <DropdownMenu
+          aria-label="Sidebar Menu"
+          itemClasses={{
+            base: "text-dark data-[hover=true]:text-primary text-sm font-medium data-[hover=true]:bg-transparent",
+          }}
+        >
+          {!isTranscriptionRoute ? (
+            <>
+              <DropdownItem
+                key="heading"
+                isReadOnly
+                className="cursor-default px-0"
+              >
+                <h3 className="text-2xl font-bold text-midnight ">Main Menu</h3>
+              </DropdownItem>
+
+              <DropdownItem
+                key="transcription"
+                className="px-2"
+                onPress={() => navigate("/transcription")}
+              >
+                Transcription Training
+              </DropdownItem>
+
+              <DropdownItem
+                key="prompt"
+                className="px-2"
+                onPress={() => navigate("/prompt-designer")}
+              >
+                Prompt Designer
+              </DropdownItem>
+            </>
+          ) : (
+            <>
+              <DropdownItem
+                key="heading"
+                isReadOnly
+                className="cursor-default px-0"
+              >
+                <h3 className="text-2xl font-bold text-midnight ">Projects</h3>
+              </DropdownItem>
+
+              {projects.map((project) => (
+                <DropdownItem
+                  key={project.id}
+                  className="px-2"
+                  onPress={() => navigate(`/transcription/${project.id}`)}
+                >
+                  {project.name}
+                </DropdownItem>
+              ))}
             </>
           )}
-        </DrawerContent>
-      </Drawer>
-    </>
+        </DropdownMenu>
+      </Dropdown>
+
+      {location.pathname.match(/^\/transcription\/\d+$/) && selectedProject && (
+        <Breadcrumbs
+          itemClasses={{
+            item: "text-light-gray data-[current=true]:text-light-gray font-bold",
+            separator: "text-light-gray px-1 font-bold",
+          }}
+          separator="/"
+        >
+          <BreadcrumbItem href="/transcription">Projects</BreadcrumbItem>
+          <BreadcrumbItem>{selectedProject.name}</BreadcrumbItem>
+        </Breadcrumbs>
+      )}
+    </div>
   );
 };
 

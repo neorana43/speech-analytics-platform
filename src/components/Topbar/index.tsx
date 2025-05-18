@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { Navbar, NavbarBrand, NavbarContent } from "@heroui/navbar";
 import { Input } from "@heroui/input";
@@ -10,17 +9,26 @@ import {
   DropdownTrigger,
 } from "@heroui/dropdown";
 import { Avatar } from "@heroui/react";
+import { useEffect, useState } from "react";
 
 import { logout } from "@/lib/auth";
 
 const Topbar = () => {
   const navigate = useNavigate();
+  const [userEmail, setUserEmail] = useState("admin@example.com");
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+
+    if (storedEmail) setUserEmail(storedEmail);
+  }, []);
 
   return (
     <Navbar
-      className="fixed bg-transparent py-8"
+      className="bg-transparent pt-8 pb-3"
       isBlurred={false}
       maxWidth="full"
+      position="static"
     >
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
@@ -37,7 +45,7 @@ const Topbar = () => {
       >
         <Input
           classNames={{
-            base: "max-w-full  h-10",
+            base: "max-w-full h-10",
             mainWrapper: "h-full",
             input: "text-small",
             inputWrapper:
@@ -54,7 +62,7 @@ const Topbar = () => {
             <Avatar
               as="button"
               className="transition-transform"
-              name="Jason Hughes"
+              name={userEmail}
               size="md"
               src="/avtar.jpg"
             />
@@ -62,7 +70,7 @@ const Topbar = () => {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">admin@example.com</p>
+              <p className="font-semibold truncate">{userEmail}</p>
             </DropdownItem>
             <DropdownItem
               key="settings"
@@ -72,7 +80,6 @@ const Topbar = () => {
             >
               My Settings
             </DropdownItem>
-
             <DropdownItem
               key="logout"
               color="danger"

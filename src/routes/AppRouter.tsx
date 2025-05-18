@@ -2,22 +2,28 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import { useAuth } from "@/auth/AuthContext";
 import AppLayout from "@/layouts/AppLayout";
-import LoginPage from "@/pages/Login";
-import WelcomePage from "@/pages/Welcome";
-import TranscriptionPage from "@/pages/Transcription";
-import PromptDesignerPage from "@/pages/PromptDesigner";
+import Login from "@/pages/Login";
+import Welcome from "@/pages/Welcome";
+import PromptDesigner from "@/pages/PromptDesigner";
+import Transcription from "@/pages/Transcription";
+import TranscriptionProject from "@/pages/Transcription/Project"; // You can create this
+
 const AppRouter = () => {
   const { isAuthenticated } = useAuth();
 
   return (
     <Routes>
-      <Route element={<LoginPage />} path="/login" />
+      {/* Public route */}
+      <Route element={<Login />} path="/login" />
+
+      {/* Protected routes */}
       {isAuthenticated ? (
         <Route element={<AppLayout />}>
           <Route element={<Navigate to="/welcome" />} path="/" />
-          <Route element={<WelcomePage />} path="/welcome" />
-          <Route element={<TranscriptionPage />} path="/transcription" />
-          <Route element={<PromptDesignerPage />} path="/prompt-designer" />
+          <Route element={<Welcome />} path="/welcome" />
+          <Route element={<PromptDesigner />} path="/prompt-designer" />
+          <Route element={<Transcription />} path="/transcription" />
+          <Route element={<TranscriptionProject />} path="/transcription/:id" />
         </Route>
       ) : (
         <Route element={<Navigate to="/login" />} path="*" />

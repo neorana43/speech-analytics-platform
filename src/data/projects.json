@@ -1,0 +1,622 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "Rubenstein Law",
+      "interactions": [
+        {
+          "id": 1000,
+          "date": "02/23/2025 02:07 AM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Emma Stone",
+          "disposition": "Not Sold",
+          "accuracy": 77,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1001,
+          "date": "02/26/2025 01:41 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "John Doe",
+          "disposition": "Follow Up",
+          "accuracy": 64,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1002,
+          "date": "02/24/2025 02:10 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "Liam Brown",
+          "disposition": "Member Service",
+          "accuracy": 63,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1003,
+          "date": "02/25/2025 02:28 AM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Liam Brown",
+          "disposition": "Escalated",
+          "accuracy": 89,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1004,
+          "date": "02/22/2025 01:19 AM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Arlene Joseph",
+          "disposition": "Follow Up",
+          "accuracy": 73,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1005,
+          "date": "02/24/2025 01:34 AM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "John Doe",
+          "disposition": "Payment Issue",
+          "accuracy": 65,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1006,
+          "date": "02/27/2025 05:32 AM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Sarah Green",
+          "disposition": "Member Service",
+          "accuracy": 98,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1007,
+          "date": "02/21/2025 11:49 AM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Liam Brown",
+          "disposition": "Escalated",
+          "accuracy": 71,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1008,
+          "date": "02/22/2025 04:07 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "Sarah Green",
+          "disposition": "Sold Plan",
+          "accuracy": 95,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1009,
+          "date": "02/25/2025 01:24 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Arlene Joseph",
+          "disposition": "Member Service",
+          "accuracy": 73,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1010,
+          "date": "02/26/2025 07:35 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Liam Brown",
+          "disposition": "Sold Plan",
+          "accuracy": 61,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1011,
+          "date": "02/22/2025 03:32 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "David Lee",
+          "disposition": "Payment Issue",
+          "accuracy": 100,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1012,
+          "date": "02/24/2025 05:47 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "Emma Stone",
+          "disposition": "Escalated",
+          "accuracy": 92,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1013,
+          "date": "02/25/2025 11:58 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "Sarah Green",
+          "disposition": "Payment Issue",
+          "accuracy": 93,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1014,
+          "date": "02/24/2025 10:25 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Liam Brown",
+          "disposition": "Escalated",
+          "accuracy": 71,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1015,
+          "date": "02/25/2025 09:36 PM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "John Doe",
+          "disposition": "Resolved",
+          "accuracy": 88,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1016,
+          "date": "02/24/2025 04:04 AM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Arlene Joseph",
+          "disposition": "Sold Plan",
+          "accuracy": 99,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1017,
+          "date": "02/21/2025 04:42 AM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Emma Stone",
+          "disposition": "Escalated",
+          "accuracy": 76,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1018,
+          "date": "02/20/2025 09:03 PM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "John Doe",
+          "disposition": "Escalated",
+          "accuracy": 65,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1019,
+          "date": "02/21/2025 09:49 PM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "David Lee",
+          "disposition": "Escalated",
+          "accuracy": 66,
+          "qualityReviewed": "neutral"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Acme Corp",
+      "interactions": [
+        {
+          "id": 1100,
+          "date": "02/27/2025 08:56 AM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Emma Stone",
+          "disposition": "Resolved",
+          "accuracy": 73,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1101,
+          "date": "02/24/2025 07:18 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "David Lee",
+          "disposition": "Escalated",
+          "accuracy": 88,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1102,
+          "date": "02/25/2025 03:34 AM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Liam Brown",
+          "disposition": "Member Service",
+          "accuracy": 75,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1103,
+          "date": "02/23/2025 01:10 PM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Sarah Green",
+          "disposition": "Escalated",
+          "accuracy": 93,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1104,
+          "date": "02/23/2025 10:31 AM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Arlene Joseph",
+          "disposition": "Follow Up",
+          "accuracy": 91,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1105,
+          "date": "02/24/2025 09:50 PM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "John Doe",
+          "disposition": "Escalated",
+          "accuracy": 81,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1106,
+          "date": "02/24/2025 10:40 AM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Arlene Joseph",
+          "disposition": "Payment Issue",
+          "accuracy": 73,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1107,
+          "date": "02/23/2025 01:47 AM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "John Doe",
+          "disposition": "Not Sold",
+          "accuracy": 88,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1108,
+          "date": "02/25/2025 02:24 AM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Arlene Joseph",
+          "disposition": "Escalated",
+          "accuracy": 88,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1109,
+          "date": "02/27/2025 02:56 AM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Liam Brown",
+          "disposition": "Member Service",
+          "accuracy": 82,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1110,
+          "date": "02/20/2025 01:42 PM",
+          "status": "Processed",
+          "queue": "Billing",
+          "agent": "Liam Brown",
+          "disposition": "Payment Issue",
+          "accuracy": 92,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1111,
+          "date": "02/26/2025 03:49 AM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Emma Stone",
+          "disposition": "Payment Issue",
+          "accuracy": 76,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1112,
+          "date": "02/23/2025 09:15 PM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Emma Stone",
+          "disposition": "Not Sold",
+          "accuracy": 72,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1113,
+          "date": "02/23/2025 08:21 PM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "John Doe",
+          "disposition": "Escalated",
+          "accuracy": 77,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1114,
+          "date": "02/25/2025 02:16 PM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Arlene Joseph",
+          "disposition": "Escalated",
+          "accuracy": 68,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1115,
+          "date": "02/25/2025 11:48 AM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Emma Stone",
+          "disposition": "Sold Plan",
+          "accuracy": 78,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1116,
+          "date": "02/22/2025 10:23 PM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Sarah Green",
+          "disposition": "Not Sold",
+          "accuracy": 97,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1117,
+          "date": "02/24/2025 11:34 PM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Arlene Joseph",
+          "disposition": "Not Sold",
+          "accuracy": 73,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1118,
+          "date": "02/24/2025 01:45 PM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Arlene Joseph",
+          "disposition": "Follow Up",
+          "accuracy": 63,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1119,
+          "date": "02/22/2025 05:44 AM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "David Lee",
+          "disposition": "Not Sold",
+          "accuracy": 63,
+          "qualityReviewed": "green"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Call Center Z",
+      "interactions": [
+        {
+          "id": 1200,
+          "date": "02/23/2025 06:37 AM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Liam Brown",
+          "disposition": "Sold Plan",
+          "accuracy": 98,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1201,
+          "date": "02/24/2025 12:16 AM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Liam Brown",
+          "disposition": "Not Sold",
+          "accuracy": 69,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1202,
+          "date": "02/26/2025 06:17 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Arlene Joseph",
+          "disposition": "Resolved",
+          "accuracy": 65,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1203,
+          "date": "02/20/2025 02:09 PM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Liam Brown",
+          "disposition": "Payment Issue",
+          "accuracy": 62,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1204,
+          "date": "02/24/2025 02:05 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "John Doe",
+          "disposition": "Member Service",
+          "accuracy": 98,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1205,
+          "date": "02/23/2025 01:53 AM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Emma Stone",
+          "disposition": "Not Sold",
+          "accuracy": 80,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1206,
+          "date": "02/25/2025 04:35 PM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "John Doe",
+          "disposition": "Escalated",
+          "accuracy": 74,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1207,
+          "date": "02/24/2025 09:35 PM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Arlene Joseph",
+          "disposition": "Follow Up",
+          "accuracy": 84,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1208,
+          "date": "02/25/2025 05:25 PM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "David Lee",
+          "disposition": "Escalated",
+          "accuracy": 89,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1209,
+          "date": "02/23/2025 01:01 AM",
+          "status": "Processed",
+          "queue": "Sales",
+          "agent": "Liam Brown",
+          "disposition": "Sold Plan",
+          "accuracy": 66,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1210,
+          "date": "02/21/2025 05:11 AM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Liam Brown",
+          "disposition": "Member Service",
+          "accuracy": 96,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1211,
+          "date": "02/22/2025 03:35 AM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Arlene Joseph",
+          "disposition": "Payment Issue",
+          "accuracy": 70,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1212,
+          "date": "02/26/2025 10:30 AM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Liam Brown",
+          "disposition": "Member Service",
+          "accuracy": 80,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1213,
+          "date": "02/21/2025 08:07 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "David Lee",
+          "disposition": "Member Service",
+          "accuracy": 71,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1214,
+          "date": "02/22/2025 04:37 PM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Sarah Green",
+          "disposition": "Member Service",
+          "accuracy": 63,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1215,
+          "date": "02/24/2025 06:03 PM",
+          "status": "Pending",
+          "queue": "Sales",
+          "agent": "Liam Brown",
+          "disposition": "Not Sold",
+          "accuracy": 80,
+          "qualityReviewed": "green"
+        },
+        {
+          "id": 1216,
+          "date": "02/24/2025 09:31 PM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "Liam Brown",
+          "disposition": "Follow Up",
+          "accuracy": 93,
+          "qualityReviewed": "neutral"
+        },
+        {
+          "id": 1217,
+          "date": "02/22/2025 03:03 PM",
+          "status": "Pending",
+          "queue": "Support",
+          "agent": "Sarah Green",
+          "disposition": "Payment Issue",
+          "accuracy": 74,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1218,
+          "date": "02/24/2025 07:09 PM",
+          "status": "Processed",
+          "queue": "Support",
+          "agent": "David Lee",
+          "disposition": "Sold Plan",
+          "accuracy": 68,
+          "qualityReviewed": "red"
+        },
+        {
+          "id": 1219,
+          "date": "02/20/2025 01:52 PM",
+          "status": "Pending",
+          "queue": "Billing",
+          "agent": "Emma Stone",
+          "disposition": "Follow Up",
+          "accuracy": 67,
+          "qualityReviewed": "green"
+        }
+      ]
+    }
+  ]
+}

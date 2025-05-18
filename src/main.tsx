@@ -21,5 +21,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </QueryClientProvider>
       </HeroUIProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

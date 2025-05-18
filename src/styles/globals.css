@@ -12,4 +12,11 @@
   .font-roboto {
     font-family: "Roboto", sans-serif;
   }
+  .page-title {
+    @apply text-2xl font-bold;
+  }
+  .welcome-bg {
+    background: url("/welcome-bg.png") no-repeat center right;
+    background-size: contain;
+  }
 }
