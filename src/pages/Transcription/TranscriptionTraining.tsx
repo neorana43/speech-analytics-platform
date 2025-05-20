@@ -142,7 +142,6 @@ const TranscriptionTraining = () => {
               </div>
             </div>
 
-            {/* Audio player */}
             <div className="bg-gray-100 rounded-md h-48 flex items-center justify-center text-sm text-gray-500">
               <audio ref={audioRef} controls className="w-full h-full">
                 <source src={data.audio_file_uri} type="audio/wav" />
@@ -252,7 +251,6 @@ const TranscriptionTraining = () => {
               </div>
             </Card>
 
-            {/* Right: Corrections Table */}
             <Card className="px-4 py-6 flex flex-col gap-4 h-[26.125rem] ">
               <div className="grid grid-cols-2 auto-rows-auto text-midnight  gap-2 text-xs font-bold">
                 <div className="text-sm text-midnight font-extrabold pb-4">
