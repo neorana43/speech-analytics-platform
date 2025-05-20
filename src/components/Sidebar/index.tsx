@@ -20,6 +20,7 @@ interface Client {
 }
 
 interface Interaction {
+  id: number;
   interaction_id: string;
   status: string;
 }
@@ -36,7 +37,7 @@ const Sidebar = () => {
   const [interactionStatus, setInteractionStatus] = useState<string | null>(
     null,
   );
-  const [interactionId, setInteractionId] = useState<string | null>(null);
+  const [interactionLabel, setInteractionLabel] = useState<string | null>(null);
 
   const selectedProjectId = useMemo(() => {
     const match = location.pathname.match(/^\/transcription\/(\d+)/);
@@ -68,38 +69,40 @@ const Sidebar = () => {
   }, [token, isTranscriptionRoute]);
 
   useEffect(() => {
-    const fetchStatusForInteraction = async () => {
-      // Clear when not on training page
-      if (!isTrainingPage) {
-        setInteractionId(null);
+    const fetchInteractionDetails = async () => {
+      if (!token || !isTrainingPage) {
         setInteractionStatus(null);
+        setInteractionLabel(null);
 
         return;
       }
 
-      if (!token) return;
-
       const idFromQuery = searchParams.get("interaction_id");
+      const interactionId = idFromQuery ? parseInt(idFromQuery, 10) : null;
 
-      setInteractionId(idFromQuery);
+      if (!interactionId || !selectedProjectId) return;
 
-      if (idFromQuery) {
-        try {
-          const api = ApiService(token);
-          const interactions = await api.filterInteractions({});
-          const match = interactions.find(
-            (item: Interaction) => item.interaction_id === idFromQuery,
-          );
+      try {
+        const api = ApiService(token);
+        const interactions = await api.filterInteractions({
+          client_id: selectedProjectId,
+        });
 
-          setInteractionStatus(match?.status || null);
-        } catch (err) {
-          console.error("❌ Failed to fetch interaction status:", err);
+        const match = interactions.find(
+          (item: Interaction) => item.id === interactionId,
+        );
+
+        if (match) {
+          setInteractionStatus(match.status);
+          setInteractionLabel(`${match.id}`);
         }
+      } catch (err) {
+        console.error("❌ Failed to fetch interaction status:", err);
       }
     };
 
-    fetchStatusForInteraction();
-  }, [token, isTrainingPage, searchParams]);
+    fetchInteractionDetails();
+  }, [token, isTrainingPage, searchParams, selectedProjectId]);
 
   return (
     <div className="flex gap-3 items-end relative">
@@ -182,12 +185,15 @@ const Sidebar = () => {
           separator="/"
         >
           <BreadcrumbItem href="/transcription">Projects</BreadcrumbItem>
-          <BreadcrumbItem>{selectedProject.name}</BreadcrumbItem>
-
+          <BreadcrumbItem href={`/transcription/${selectedProjectId}`}>
+            {selectedProject.name}
+          </BreadcrumbItem>
           {interactionStatus && (
             <BreadcrumbItem>{interactionStatus}</BreadcrumbItem>
           )}
-          {interactionId && <BreadcrumbItem>{interactionId}</BreadcrumbItem>}
+          {interactionLabel && (
+            <BreadcrumbItem>{interactionLabel}</BreadcrumbItem>
+          )}
         </Breadcrumbs>
       )}
     </div>

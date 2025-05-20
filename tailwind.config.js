@@ -13,6 +13,7 @@ export default {
     extend: {
       colors: {
         midnight: "#696969",
+        "light-midnight": "#B7B7B7",
         "light-gray": "#9B9B9B",
         light: "#ebebeb",
         primary: "#EC692D",

@@ -88,6 +88,7 @@ const Transcription = () => {
                 showControls
                 showShadow
                 color="primary"
+                initialPage={page}
                 page={page}
                 total={pages}
                 onChange={setPage}

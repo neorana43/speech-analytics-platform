@@ -8,7 +8,6 @@ import axios from "axios";
 
 export const testAllApis = async (token: string) => {
   try {
-    // Set bearer token
     const client = axios.create({
       baseURL: "/api",
       headers: {
@@ -18,31 +17,60 @@ export const testAllApis = async (token: string) => {
     });
 
     // 1. GET /api/Config/clients
-    const clients = await client.get("/Config/clients");
+    const clientsRes = await client.get("/Config/clients");
+    const clients = clientsRes.data;
 
-    console.log("✅ CLIENTS", clients.data);
+    console.log("✅ CLIENTS", clients);
 
-    // 2. GET /api/Config/interaction_status
-    const status = await client.get("/Config/interaction_status");
+    const clientId = clients[0]?.id;
 
-    console.log("✅ INTERACTION STATUS", status.data);
+    if (!clientId) {
+      console.warn("❌ No valid client_id available");
 
-    // 3. GET /api/Config/interaction_tags
-    const tags = await client.get("/Config/interaction_tags");
+      return;
+    }
 
-    console.log("✅ INTERACTION TAGS", tags.data);
+    // 2. GET /api/Config/interaction_status/{clientId}
+    const statusRes = await client.get(
+      `/Config/interaction_status/${clientId}`,
+    );
+    const statuses = statusRes.data;
+
+    console.log("✅ INTERACTION STATUS", statuses);
+
+    // 3. GET /api/Config/interaction_tags/{clientId}
+    const tagsRes = await client.get(`/Config/interaction_tags/${clientId}`);
+    const tags = tagsRes.data;
+
+    console.log("✅ INTERACTION TAGS", tags);
 
     // 4. POST /api/Audio/interactions/filter
-    const filterPayload = {};
+    const filterPayload = {
+      client_id: clientId,
+      start_date: "2025-01-01T00:00:00Z", // optional
+      end_date: new Date().toISOString(), // optional
+      status_ids: statuses.map((s: any) => s.id), // optional
+      tag_ids: tags.map((t: any) => t.id), // optional
+    };
 
-    const filtered = await client.post(
+    const filterRes = await client.post(
       "/Audio/interactions/filter",
       filterPayload,
     );
 
-    console.log("✅ FILTERED INTERACTIONS", filtered.data);
+    console.log("✅ FILTERED INTERACTIONS", filterRes.data);
 
-    // All results summary
+    // 5. GET /api/Audio/audio-details/{clientId}/{interactionId}
+    const firstInteraction = filterRes.data[0];
+
+    if (firstInteraction) {
+      const detailsRes = await client.get(
+        `/Audio/audio-details/${clientId}/${firstInteraction.id}`,
+      );
+
+      console.log("✅ AUDIO DETAILS", detailsRes.data);
+    }
+
     console.log("🎯 ALL DONE");
   } catch (err: any) {
     console.error("❌ API error:", err?.response?.data || err.message);
