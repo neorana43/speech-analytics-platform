@@ -17,6 +17,7 @@ export default {
         "light-gray": "#9B9B9B",
         light: "#ebebeb",
         primary: "#EC692D",
+        secondary: "#4e598c",
         dark: "#717171",
       },
       keyframes: {

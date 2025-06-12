@@ -7,7 +7,9 @@ import Topbar from "@/components/Topbar";
 const AppLayout = () => {
   const location = useLocation();
   const isWelcomePage =
-    location.pathname === "/" || location.pathname === "/welcome";
+    location.pathname === "/" ||
+    location.pathname === "/welcome" ||
+    location.pathname === "/client-selection";
 
   return (
     <div

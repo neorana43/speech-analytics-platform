@@ -1,20 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@heroui/button";
-import { useEffect } from "react";
 
 import styles from "./Welcome.module.scss";
 
-import { testAllApis } from "@/lib/testApi";
-import { useAuth } from "@/auth/AuthContext";
+interface Client {
+  id: number;
+  name: string;
+}
 
 const Welcome = () => {
   const navigate = useNavigate();
 
-  const { token } = useAuth();
+  // const { token } = useAuth();
 
-  useEffect(() => {
-    if (token) testAllApis(token);
-  }, [token]);
+  // useEffect(() => {
+  //   if (token) testAllApis(token);
+  // }, [token]);
+
+  const handleTranscriptionClick = () => {
+    const selectedClientStr = localStorage.getItem("selectedClient");
+
+    if (selectedClientStr) {
+      const selectedClient: Client = JSON.parse(selectedClientStr);
+
+      navigate(`/transcription/${selectedClient.id}`);
+    }
+  };
 
   return (
     <div className={styles.welcomeContainer}>
@@ -27,7 +38,7 @@ const Welcome = () => {
             className="px-7 py-3 text-sm font-medium font-roboto w-full"
             color="primary"
             radius="full"
-            onPress={() => navigate("/transcription")}
+            onPress={handleTranscriptionClick}
           >
             Transcription Training
           </Button>

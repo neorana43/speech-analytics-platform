@@ -11,6 +11,9 @@ import {
 } from "@heroui/react";
 import { Menu } from "lucide-react";
 
+import { Interaction } from "../../types/interaction";
+import { MenuResponse } from "../../types/menu";
+
 import { useAuth } from "@/auth/AuthContext";
 import { ApiService } from "@/lib/api";
 
@@ -19,11 +22,19 @@ interface Client {
   name: string;
 }
 
-interface Interaction {
-  id: number;
-  interaction_id: string;
-  status: string;
-}
+const menuPathMap: Record<string, string> = {
+  Users: "/users",
+  Clients: "/clients",
+  Prompt: "/prompt-designer",
+  Transcript: "/transcription",
+};
+
+const menuDisplayNames: Record<string, string> = {
+  Users: "Users",
+  Clients: "Clients",
+  Prompt: "Prompt Designer",
+  Transcript: "Transcription Training",
+};
 
 const Sidebar = () => {
   const location = useLocation();
@@ -31,25 +42,56 @@ const Sidebar = () => {
   const { token } = useAuth();
   const [searchParams] = useSearchParams();
 
-  const isTranscriptionRoute = location.pathname.startsWith("/transcription");
+  const isTranscriptionDetailsPage =
+    location.pathname.match(/^\/transcription\/\d+$/) !== null;
+  const isTrainingPage = location.pathname.includes("/training");
 
   const [clients, setClients] = useState<Client[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuResponse[]>([]);
   const [interactionStatus, setInteractionStatus] = useState<string | null>(
     null,
   );
   const [interactionLabel, setInteractionLabel] = useState<string | null>(null);
 
   const selectedProjectId = useMemo(() => {
+    // First try to get from URL
     const match = location.pathname.match(/^\/transcription\/(\d+)/);
 
-    return match ? Number(match[1]) : null;
+    if (match) return Number(match[1]);
+
+    // If not in URL, try to get from localStorage
+    const selectedClientStr = localStorage.getItem("selectedClient");
+
+    if (selectedClientStr) {
+      const selectedClient: Client = JSON.parse(selectedClientStr);
+
+      return selectedClient.id;
+    }
+
+    return 0; // Default to 0 for no client selected
   }, [location.pathname]);
 
   const selectedProject = useMemo(() => {
     return clients.find((client) => client.id === selectedProjectId);
   }, [clients, selectedProjectId]);
 
-  const isTrainingPage = location.pathname.includes("/training");
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const api = ApiService(token!);
+        const data = await api.getMenu(selectedProjectId);
+
+        setMenuItems(data);
+      } catch (err) {
+        console.error("❌ Failed to fetch menu items:", err);
+        setMenuItems([]);
+      }
+    };
+
+    if (token) {
+      fetchMenu();
+    }
+  }, [token, selectedProjectId]);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -63,10 +105,10 @@ const Sidebar = () => {
       }
     };
 
-    if (token && isTranscriptionRoute) {
+    if (token) {
       fetchClients();
     }
-  }, [token, isTranscriptionRoute]);
+  }, [token]);
 
   useEffect(() => {
     const fetchInteractionDetails = async () => {
@@ -104,6 +146,18 @@ const Sidebar = () => {
     fetchInteractionDetails();
   }, [token, isTrainingPage, searchParams, selectedProjectId]);
 
+  const handleMenuClick = (menuName: string) => {
+    const path = menuPathMap[menuName];
+
+    if (path) {
+      if (path === "/transcription" && selectedProjectId) {
+        navigate(`/transcription/${selectedProjectId}`);
+      } else {
+        navigate(path);
+      }
+    }
+  };
+
   return (
     <div className="flex gap-3 items-end relative">
       <Dropdown
@@ -129,54 +183,29 @@ const Sidebar = () => {
             base: "text-dark data-[hover=true]:text-primary text-sm font-medium data-[hover=true]:bg-transparent",
           }}
         >
-          {!isTranscriptionRoute ? (
-            <>
+          <DropdownItem
+            key="heading-main"
+            isReadOnly
+            className="cursor-default px-0"
+          >
+            <h3 className="text-2xl font-bold text-midnight">Main Menu</h3>
+          </DropdownItem>
+
+          <>
+            {menuItems.map((item) => (
               <DropdownItem
-                key="heading"
-                isReadOnly
-                className="cursor-default px-0"
-              >
-                <h3 className="text-2xl font-bold text-midnight">Main Menu</h3>
-              </DropdownItem>
-              <DropdownItem
-                key="transcription"
+                key={item.menu}
                 className="px-2"
-                onPress={() => navigate("/transcription")}
+                onPress={() => handleMenuClick(item.menu)}
               >
-                Transcription Training
+                {menuDisplayNames[item.menu] || item.menu}
               </DropdownItem>
-              <DropdownItem
-                key="prompt"
-                className="px-2"
-                onPress={() => navigate("/prompt-designer")}
-              >
-                Prompt Designer
-              </DropdownItem>
-            </>
-          ) : (
-            <>
-              <DropdownItem
-                key="heading"
-                isReadOnly
-                className="cursor-default px-0"
-              >
-                <h3 className="text-2xl font-bold text-midnight">Projects</h3>
-              </DropdownItem>
-              {clients.map((client) => (
-                <DropdownItem
-                  key={client.id}
-                  className="px-2"
-                  onPress={() => navigate(`/transcription/${client.id}`)}
-                >
-                  {client.name}
-                </DropdownItem>
-              ))}
-            </>
-          )}
+            ))}
+          </>
         </DropdownMenu>
       </Dropdown>
 
-      {selectedProject && (
+      {selectedProject && (isTranscriptionDetailsPage || isTrainingPage) && (
         <Breadcrumbs
           itemClasses={{
             item: "text-light-gray data-[current=true]:text-light-gray font-bold",
@@ -184,7 +213,7 @@ const Sidebar = () => {
           }}
           separator="/"
         >
-          <BreadcrumbItem href="/transcription">Projects</BreadcrumbItem>
+          <BreadcrumbItem>Projects</BreadcrumbItem>
           <BreadcrumbItem href={`/transcription/${selectedProjectId}`}>
             {selectedProject.name}
           </BreadcrumbItem>

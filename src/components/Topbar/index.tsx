@@ -1,94 +1,157 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Navbar, NavbarBrand, NavbarContent } from "@heroui/navbar";
-import { Input } from "@heroui/input";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
 } from "@heroui/dropdown";
-import { Avatar } from "@heroui/react";
+import { Avatar, Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 
-import { logout } from "@/lib/auth";
+import { useAuth } from "@/auth/AuthContext";
+
+interface Client {
+  id: number;
+  name: string;
+}
 
 const Topbar = () => {
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState("admin@example.com");
+  const location = useLocation();
+  const { logout, user } = useAuth();
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+
+  const updateSelectedClient = () => {
+    const storedClient = localStorage.getItem("selectedClient");
+
+    if (storedClient) {
+      setSelectedClient(JSON.parse(storedClient));
+    } else {
+      setSelectedClient(null);
+    }
+  };
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("userEmail");
+    updateSelectedClient();
 
-    if (storedEmail) setUserEmail(storedEmail);
+    // Listen for storage changes from other tabs/windows
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "selectedClient") {
+        updateSelectedClient();
+      }
+    };
+
+    // Listen for custom event for same-window updates
+    const handleClientUpdate = () => {
+      updateSelectedClient();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("clientUpdated", handleClientUpdate);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("clientUpdated", handleClientUpdate);
+    };
   }, []);
+
+  const userName = user ? `${user.first_name} ${user.last_name}` : "";
+  const userEmail = user?.email || "";
 
   return (
     <Navbar
-      className="bg-transparent pt-8 pb-3"
+      className="bg-transparent pt-6 pb-4"
       isBlurred={false}
       maxWidth="full"
       position="static"
     >
       <NavbarContent justify="start">
-        <NavbarBrand className="mr-4">
+        <NavbarBrand className="mr-8">
           <Link to={"/"}>
-            <img alt="logo" height={56} src="/logo.svg" width={296} />
+            <img alt="logo" height={48} src="/logo.svg" width={260} />
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent
         as="div"
-        className="items-center bg-white py-2 px-3 rounded-full shadow-lg max-w-80 gap-3"
+        className="items-center bg-white py-2.5 px-4 rounded-full shadow-sm border border-gray-100 max-w-fit gap-4 "
         justify="end"
       >
-        <Input
-          classNames={{
-            base: "max-w-full h-10",
-            mainWrapper: "h-full",
-            input: "text-small",
-            inputWrapper:
-              "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-          }}
-          placeholder="Search"
-          radius="full"
-          size="md"
-          startContent={<Search size={18} />}
-          type="search"
-        />
+        {location.pathname !== "/client-selection" && (
+          <>
+            {selectedClient && (
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-500">Current Client</span>
+                  <span className="font-medium text-sm">
+                    {selectedClient.name}
+                  </span>
+                </div>
+                <Button
+                  color="secondary"
+                  radius="full"
+                  size="sm"
+                  onPress={() => navigate("/client-selection")}
+                >
+                  Change
+                </Button>
+              </div>
+            )}
+            {!selectedClient && (
+              <Button
+                color="secondary"
+                radius="full"
+                size="sm"
+                onPress={() => navigate("/client-selection")}
+              >
+                Select Client
+              </Button>
+            )}
+            <div className="h-6 w-px bg-gray-200" />
+          </>
+        )}
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500">Welcome,</span>
+          <span className="font-medium text-sm">{userName}</span>
+        </div>
+        <div className="h-6 w-px bg-gray-200" />
         <Dropdown placement="bottom-end">
-          <DropdownTrigger className="flex-none w-10">
+          <DropdownTrigger className="flex-none">
             <Avatar
               as="button"
-              className="transition-transform"
-              name={userEmail}
-              size="md"
+              className="transition-transform hover:scale-105"
+              name={userName}
+              size="sm"
               src="/avtar.jpg"
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
+          <DropdownMenu
+            aria-label="Profile Actions"
+            className="p-2"
+            variant="flat"
+          >
             <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold truncate">{userEmail}</p>
+              <div className="flex flex-col">
+                <p className="text-xs text-gray-500">Signed in as</p>
+                <p className="font-medium text-sm truncate">{userEmail}</p>
+              </div>
             </DropdownItem>
             <DropdownItem
               key="settings"
-              onPress={() => {
-                navigate("/settings");
-              }}
+              className="gap-2"
+              onPress={() => navigate("/settings")}
             >
-              My Settings
+              <span className="text-sm">My Settings</span>
             </DropdownItem>
             <DropdownItem
               key="logout"
+              className="gap-2"
               color="danger"
-              onPress={() => {
-                logout();
-                navigate("/login");
-              }}
+              onPress={logout}
             >
-              Log Out
+              <span className="text-sm">Log Out</span>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
